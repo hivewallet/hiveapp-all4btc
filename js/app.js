@@ -1,5 +1,8 @@
 	jQuery(document).ready(function(){
-		InitAll4btc();
+        console.log('install all btc ready()');
+        alert('wait');
+        InitAll4btc();
+        console.log('init done');
 	});
 	
 	var bitcoin = bitcoin || {
@@ -41,8 +44,8 @@
     function showError(sText)
     {
 		jQuery('#loading-page').hide();
-		jQuery('#error-page').show();
-		jQuery('#error-page span').html(sText);
+		jQuery('#error-page').show();		
+		jQuery('#error-page span').empty().html(sText);
 	}
 	
     function payUrl(data,type)
@@ -50,7 +53,19 @@
 		
 		if(data[0]=='ERROR')
 		{
-			showError(data[1]);
+			//showError(data[1]);
+			
+			jQuery('#loading-page').hide();
+			jQuery('#error-page').show();
+			
+			var spanError = jQuery('#error-page span');
+			
+			spanError.empty();
+			
+			jQuery.each(data[1], function(key, value) {
+				spanError.append("<div>" + value + "</div>");
+			});
+			
 			return;
 		}
 				
@@ -69,7 +84,7 @@
 				var htm = jQuery.parseHTML(htmlData);
 				var pay = $(htm).find('#amountSpan').text();
 				var number = $(htm).find('#addressCode').text();
-								
+				
 				if(number)
 				{
 					payCoins(number, pay);
@@ -93,8 +108,7 @@
 		var iTextHeight = jQuery('#middle-text').height();		
 		var iMiddleTextMargin = (iWindowHeight)/2-iTextHeight/2;		
 		if(iMiddleTextMargin>0)
-			jQuery('#middle-text').css("top",iMiddleTextMargin);
-		
+			jQuery('#middle-text').css("top",iMiddleTextMargin);		
 		
 		iTextHeight = jQuery('#loading-middle').height();		
 		iMiddleTextMargin = (iWindowHeight)/2-iTextHeight/2;
@@ -109,14 +123,17 @@
         {
 			
 			resizeWindow();
-			
-			$( window ).resize(function() {
+			console.log('1');
+
+            $( window ).resize(function() {
 				resizeWindow();
 			});
-			
-			
+			console.log('2');
+
+
 			if(localStorage.user_data_first_name)
 			{
+                console.log('3');
 				jQuery('#website-page').show();
 				jQuery('#id-first-name').val(localStorage.user_data_first_name);
 				jQuery('#id-last-name').val(localStorage.user_data_last_name);
@@ -130,45 +147,51 @@
 				jQuery('#id-street-no').val(localStorage.user_data_street_no);
 				jQuery('#id-phone').val(localStorage.user_data_phone);		
 			}else{
+                console.log('4');
 				jQuery('#user-data-page').show();
-			}			
-			
+			}
+			console.log('5');
 			jQuery('#error-page-btn').click(function() 
-            {    				
+            {
+                console.log('6');
 				jQuery('#error-page').hide();
 			});
-			
+			console.log('7');
 			jQuery('.shop-button').click(function() 
-            {    				
+            {
+                console.log('8');
 				var sId = $(this).attr('id');
 				sId = sId.substring(5);
 				
 				animatePage('#website-page','#'+sId+'-page');				
 			});
-		
+		    console.log('9');
 			jQuery('#edit-profile').click(function() 
-            {    
+            {
+                console.log('10');
 				animatePage('#website-page','#user-data-page');
 			});
-		
+		    console.log('11');
 			jQuery('.cancel-buy').click(function() 
-            {    
+            {
+                console.log('12');
 				animatePage('.page','#website-page');				
 			});
-			
+			console.log('13');
 			jQuery('#bitcoin-buy').click(function() 
-			{				
+			{
+                console.log('14');
 				if(!jQuery('#bitcoin-page form').valid())
 					return false;
 				
 				jQuery('#loading-page').show();
-				
+				console.log('15');
 				var productUrl = jQuery('#other-link').val();
 				var productPrice = jQuery('#other-price').val();
 				var productCurrency = jQuery('#other-currency').val();
 				
 				var fakeUrl = 'https://all4btc.com/api/get_bill.php?';
-				fakeUrl += 'product_url='+productUrl;
+				fakeUrl += 'product_url='+encodeURIComponent(productUrl);
 				fakeUrl += '&price='+productPrice;
 				fakeUrl += '&currency='+productCurrency;
 				fakeUrl += '&notes=';
@@ -197,7 +220,7 @@
 					}
 				);	
 			});
-			
+			console.log('16');
 			jQuery('#ebay-buy').click(function() 
             {
 				
@@ -333,7 +356,8 @@
                     errorLabelContainer: jQuery("span", container),
                     wrapper: 'div',
                     submitHandler: function(form) 
-                    {    
+                    {
+                        console.log('ee1');
 						localStorage.user_data_first_name=form.elements["first-name"].value;
 						localStorage.user_data_last_name=form.elements["last-name"].value;
 						localStorage.user_data_email=form.elements["e-mail"].value;
@@ -398,11 +422,12 @@
                     errorLabelContainer: jQuery("span", container),
                     wrapper: 'div',
                     rules: {                        
-						'link': {required:true}
+						'link': {required:true,url: true}
                     },
                     messages: {
                         'link': {
-                            required:'Product URL field is required.'
+                            required:'Product URL field is required.',
+							url:'That is not a valid URL'
                         }
                     }                 
                 });
@@ -414,11 +439,12 @@
                     errorLabelContainer: jQuery("span", container),
                     wrapper: 'div',
                     rules: {                        
-						'link': {required:true}
+						'link': {required:true,url: true}
                     },
                     messages: {
                         'link': {
-                            required:'Product URL field is required.'
+                            required:'Product URL field is required.',
+							url:'That is not a valid URL'
                         }
                     }                 
                 });
@@ -430,12 +456,13 @@
                     errorLabelContainer: jQuery("span", container),
                     wrapper: 'div',
                     rules: {                        
-						'link': {required:true},
+						'link': {required:true,url: true},
 						'price': {required:true}
                     },
                     messages: {
                         'link': {
-                            required:'Product URL field is required.'
+                            required:'Product URL field is required.',
+							url:'That is not a valid URL'
                         },
 						'price': {
                             required:'Price field is required.'
@@ -443,6 +470,6 @@
                     }                 
                 });
 			
-				
+			console.log('done');
         }
      
