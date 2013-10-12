@@ -1,0 +1,213 @@
+*
+{
+	margin:0px;
+	padding:0px;
+}
+
+#error-page,#loading-page
+{
+	width:100%;
+	position:absolute;
+	background-color:rgba(0,0,0,0.5);
+}
+
+#error-page
+{
+	z-index:3000;
+}
+
+#loading-page
+{
+	z-index:2000;
+}
+
+#error-page > div:first-child
+{
+	max-width:200px;
+	border:3px solid #f00;
+	text-align:center;
+}
+
+#error-page > div
+{
+	text-align:center;
+}
+
+#loading-middle
+{
+	width:100%;	
+	text-align:center;
+	position:absolute;
+}
+
+#loading-content > img
+{
+	height:50px;
+}
+
+#logo-bar
+{
+	text-align:center;
+	padding:17px;
+	background-color:#000;
+}
+
+body
+{
+	background: url('../images/dark-bcg.jpg');
+	background-size: cover;
+}
+
+.page
+{
+	display:none;
+}
+
+.center_content
+{
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#user-data-page > div:last-child
+{
+	width:90%;
+	text-align:center;
+}
+
+#user-data-form  > input[type="text"]
+{
+	padding: 8px 6px;
+	width:90%
+}
+
+#user-data-form  > input.error,.page input.error
+{
+	border:2px solid red;
+}
+
+#user-data-form-error-continer
+{
+	display:none;
+}
+
+.whitness
+{
+	color:#fff;
+}
+
+.title
+{
+	font-size: 35px;
+	text-shadow: black 0.1em 0.1em 0.2em;
+	line-height:31px;
+	text-align:center;
+	padding:20px 12px 10px 12px;
+}
+
+#middle-text
+{
+	font-size: 40px;
+	text-shadow: black 0.1em 0.1em 0.2em;
+	line-height:40px;
+	text-align:center;
+	position:absolute;
+	width:100%
+}
+
+.step_title
+{
+	font-size: 16px;
+	text-shadow: black 0.1em 0.1em 0.2em;
+	line-height:16px;
+	margin-top:12px;
+	margin-bottom:12px;
+	text-align:center;
+}
+
+.bottom-menu
+{
+	width:100%;
+	text-align:center;
+	position:absolute;
+	bottom:0;
+	margin-bottom:20px;
+}
+
+.bottom-menu > div
+{
+	margin-top:15px;
+}
+
+.bottom-menu button
+{
+	width:200px;
+}
+
+.shop-button
+{
+	background-image:none;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #B3B3B3;
+    border-image: none;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;
+    
+    margin-bottom: 0;
+	margin-top:10px;
+    padding: 6px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+	width:90%;
+}
+
+#shop-amazon
+{
+	background-color:#f6dfbf
+}
+
+#shop-ebay
+{
+	background-color:#d3e6f7
+}
+
+#shop-bitcoin
+{
+	background-color:#f0f0f0
+}
+
+#btn-list
+{
+	text-align:center;
+	width:90%;
+}
+
+.shop-link
+{
+	width:90%;
+	text-align:center;
+}
+
+.shop-link input
+{
+	width:90%;
+}
+
+.page-error-continer
+{
+	display:none;
+}
+
+@media (max-width: 440px)
+{
+	
+}
+
+@media (min-width: 320px) and (max-width: 479px)
+{
+	
+}
