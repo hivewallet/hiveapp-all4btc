@@ -80,7 +80,8 @@
 			
 			},success:function(htmlData)
 			{ 	
-				var htm = jQuery.parseHTML(htmlData);
+				//var htm = jQuery.parseHTML(htmlData);
+                var htm = jQuery.parseHTML(htmlData.replace(/<img[^>]+>/,""));
 				var pay = $(htm).find('#amountSpan').text();
 				var number = $(htm).find('#addressCode').text();
 				
