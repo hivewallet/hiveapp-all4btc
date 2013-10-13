@@ -122,17 +122,13 @@
         {
 			
 			resizeWindow();
-			console.log('1');
 
             $( window ).resize(function() {
 				resizeWindow();
 			});
-			console.log('2');
-
 
 			if(localStorage.user_data_first_name)
 			{
-                console.log('3');
 				jQuery('#website-page').show();
 				jQuery('#id-first-name').val(localStorage.user_data_first_name);
 				jQuery('#id-last-name').val(localStorage.user_data_last_name);
@@ -146,45 +142,38 @@
 				jQuery('#id-street-no').val(localStorage.user_data_street_no);
 				jQuery('#id-phone').val(localStorage.user_data_phone);		
 			}else{
-                console.log('4');
 				jQuery('#user-data-page').show();
 			}
-			console.log('5');
+
 			jQuery('#error-page-btn').click(function() 
             {
-                console.log('6');
 				jQuery('#error-page').hide();
 			});
-			console.log('7');
-			jQuery('.shop-button').click(function() 
+
+			jQuery('.shop-button').click(function()
             {
-                console.log('8');
 				var sId = $(this).attr('id');
 				sId = sId.substring(5);
 				
 				animatePage('#website-page','#'+sId+'-page');				
 			});
-		    console.log('9');
-			jQuery('#edit-profile').click(function() 
+
+			jQuery('#edit-profile').click(function()
             {
-                console.log('10');
 				animatePage('#website-page','#user-data-page');
 			});
-		    console.log('11');
-			jQuery('.cancel-buy').click(function() 
+
+			jQuery('.cancel-buy').click(function()
             {
-                console.log('12');
-				animatePage('.page','#website-page');				
+				animatePage('.page','#website-page');
 			});
-			console.log('13');
+
 			jQuery('#bitcoin-buy').click(function() 
 			{
-                console.log('14');
 				if(!jQuery('#bitcoin-page form').valid())
 					return false;
 				
 				jQuery('#loading-page').show();
-				console.log('15');
 				var productUrl = jQuery('#other-link').val();
 				var productPrice = jQuery('#other-price').val();
 				var productCurrency = jQuery('#other-currency').val();
@@ -219,8 +208,8 @@
 					}
 				);	
 			});
-			console.log('16');
-			jQuery('#ebay-buy').click(function() 
+
+			jQuery('#ebay-buy').click(function()
             {
 				
 				if(!jQuery('#ebay-page form').valid())
@@ -356,7 +345,6 @@
                     wrapper: 'div',
                     submitHandler: function(form) 
                     {
-                        console.log('ee1');
 						localStorage.user_data_first_name=form.elements["first-name"].value;
 						localStorage.user_data_last_name=form.elements["last-name"].value;
 						localStorage.user_data_email=form.elements["e-mail"].value;
@@ -468,7 +456,5 @@
                         }
                     }                 
                 });
-			
-			console.log('done');
         }
      
