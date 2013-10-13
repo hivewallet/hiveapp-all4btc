@@ -1,8 +1,5 @@
 	jQuery(document).ready(function(){
-        console.log('install all btc ready()');
-        alert('wait');
         InitAll4btc();
-        console.log('init done');
 	});
 	
 	var bitcoin = bitcoin || {
@@ -29,10 +26,12 @@
 	function payCoins(sNumber, btcprice)
 	{	
 		jQuery('#loading-page').hide();
-		alert('payCoins:'+sNumber+';'+btcprice);
-		//bitcoin.sendCoinsForAddress(sNumber, btcprice, function(){
-			animatePage('.page','#end-page');
-		//});
+		//alert('payCoins:'+sNumber+';'+btcprice);
+		bitcoin.sendCoinsForAddress(sNumber, btcprice, function(status, transaction_hash){
+			if (status == true){
+                animatePage('.page','#end-page');
+            }
+		});
 	}
 	
     function animatePage(page_hide,page_show)
