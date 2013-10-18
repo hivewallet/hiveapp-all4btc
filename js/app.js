@@ -1,33 +1,68 @@
 	jQuery(document).ready(function(){
         InitAll4btc();
 	});
-	
-	var bitcoin = bitcoin || {
-        getClientInfo: function (callback) {
-            var info = {
-                firstname: 'Homer',
-                lastname:  'Simpson',
-                email:     'homer@fake.com',
-                address:   'poqjer23rfc234laq',
-                street:    'next to Flanders',
-                zipcode:   '12233',
-                city:      'Springfield',
-                country:   'USA'
-            };
 
-            return callback(info);
+	var bitcoin = bitcoin || {
+        BTC_IN_SATOSHI: 100000000,
+        MBTC_IN_SATOSHI: 100000,
+        UBTC_IN_SATOSHI: 100,
+
+        sendMoney: function(hash, amount, callback){
+            if (!hash){
+                throw "hash argument is undefined";
+            }
+            if (callback){
+                callback(true, 'FAKE_HASH');
+            }
         },
 
-        sendCoins: function (hash, amount, callback) {
-            return callback(true, hash);
+        getTransaction: function(id, callback){
+            if (!id || !callback){
+                throw "id and callback are required";
+            }
+            return {
+                id: 123,
+                amount: 10,
+                received: true,
+                timestamp: new Date(),
+                inputAddresses: ['HASH1'],
+                outputAddresses: ['HASH2']
+            }
+        },
+
+        getUserInfo: function(callback){
+            if (!callback){
+                throw "callback is required";
+            }
+            return {
+                firstName: 'Homer',
+                lastName:  'Simpson',
+                email:     'homer@fake.com',
+                address:   'poqjer23rfc234laq',
+            };
         }
     };
-	
+
+    function btc_string_to_satoshi(x){
+        var tab = [];
+        if (x.indexOf('.') > 0 ){
+            tab = x.split('.');
+        }else if (x.indexOf(',') > 0){
+            tab = x.split(',');
+        }else{
+            tab = [x,'0'];
+        }
+        var count = tab[1].length;
+        tab = [parseInt(tab[0]), parseInt(tab[1])];
+        amount = tab[0]*bitcoin.BTC_IN_SATOSHI + tab[1]*(bitcoin.BTC_IN_SATOSHI/(Math.pow(10,count)));
+        return amount;
+    }
+
 	function payCoins(sNumber, btcprice)
 	{	
 		jQuery('#loading-page').hide();
-		//alert('payCoins:'+sNumber+';'+btcprice);
-		bitcoin.sendCoinsForAddress(sNumber, btcprice, function(status, transaction_hash){
+        btcprice = btc_string_to_satoshi(sNumber);
+		bitcoin.sendMoney(sNumber, btcprice, function(status, transaction_hash){
 			if (status == true){
                 animatePage('.page','#end-page');
             }
