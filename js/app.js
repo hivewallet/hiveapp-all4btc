@@ -54,29 +54,25 @@ function payUrl(data,type)
         urlPayment = urlPayment.payment_url;
     }
 
-    jQuery.ajax({type: 'GET',async:true,
-        url:urlPayment,data:{
+    bitcoin.makeRequest(urlPayment, {
+      type: 'GET',
+      success:function(htmlData) {
+        //var htm = jQuery.parseHTML(htmlData);
+        var htm = jQuery.parseHTML(htmlData.replace(/<img[^>]+>/,""));
+        var pay = $(htm).find('#amountSpan').text();
+        var number = $(htm).find('#addressCode').text();
 
-        },success:function(htmlData)
-        {
-            //var htm = jQuery.parseHTML(htmlData);
-            var htm = jQuery.parseHTML(htmlData.replace(/<img[^>]+>/,""));
-            var pay = $(htm).find('#amountSpan').text();
-            var number = $(htm).find('#addressCode').text();
-
-            if(number)
-            {
-                payCoins(number, pay);
-            }else{
-                showError('Time out');
-            }
-
-        },error: function (xhr, ajaxOptions, thrownError) {
-            showError('Server error. Please, try again later');
-        }}
-
-    );
-
+        if(number)
+          {
+            payCoins(number, pay);
+          }else{
+            showError('Time out');
+          }
+      },
+      error: function (response, status, thrownError) {
+        showError('Server error. Please, try again later');
+        console.error(response, status. thrownError)
+      }});
 }
 
 function resizeWindow()
@@ -171,21 +167,17 @@ function InitAll4btc()
         fakeUrl += '&address_country='+localStorage.user_data_country;
         fakeUrl += '&_form=all4btc';
 
-        jQuery.ajax(
-            {
-                dataType: "json",
-                type: 'GET',
-                async:true,
-                url:fakeUrl,
-                success:function(data)
-                {
-                    payUrl(data,'ebay');
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    showError('Server error. Please, try again later');
-                }
-            }
-        );
+        bitcoin.makeRequest(fakeUrl, {
+          dataType: "json",
+          type: 'GET',
+          success:function(data) {
+            payUrl(data,'ebay');
+          },
+          error: function (response, status, thrownError) {
+            showError('Server error. Please, try again later');
+            console.error(response, status. thrownError)
+          }
+        });
     });
 
     jQuery('#ebay-buy').click(function()
@@ -215,56 +207,49 @@ function InitAll4btc()
         fakeUrl += '&country='+localStorage.user_data_country;
         fakeUrl += '&postal='+localStorage.user_data_post_code;
 
-        jQuery.ajax(
-            {
+        bitcoin.makeRequest(fakeUrl, {
+          dataType: "json",
+          type: 'GET',
+          success:function(data) {
+            if(data.Success) {
+
+              var fakeUrl = 'https://all4btc.com/api/get_bill.php?';
+              fakeUrl += 'item='+iItemId;
+              fakeUrl += '&quantity=1';
+              fakeUrl += '&name='+localStorage.user_data_first_name;
+              fakeUrl += '&email='+localStorage.user_data_email;
+              fakeUrl += '&phone='+localStorage.user_data_phone;
+              fakeUrl += '&address_street_and_number='+encodeURIComponent(localStorage.user_data_street+' '+localStorage.user_data_street_no);
+              fakeUrl += '&address_city='+localStorage.user_data_city;
+              fakeUrl += '&address_zip='+localStorage.user_data_post_code;
+              fakeUrl += '&address_country='+localStorage.user_data_country;
+              fakeUrl += '&item_data='+data;
+              fakeUrl += '&_form=ebay';
+
+              bitcoin.makeRequest(fakeUrl, {
                 dataType: "json",
                 type: 'GET',
-                async:true,
-                url:fakeUrl,
-                success:function(data)
-                {
-                    if(data.Success)
-                    {
-
-                        var fakeUrl = 'https://all4btc.com/api/get_bill.php?';
-                        fakeUrl += 'item='+iItemId;
-                        fakeUrl += '&quantity=1';
-                        fakeUrl += '&name='+localStorage.user_data_first_name;
-                        fakeUrl += '&email='+localStorage.user_data_email;
-                        fakeUrl += '&phone='+localStorage.user_data_phone;
-                        fakeUrl += '&address_street_and_number='+encodeURIComponent(localStorage.user_data_street+' '+localStorage.user_data_street_no);
-                        fakeUrl += '&address_city='+localStorage.user_data_city;
-                        fakeUrl += '&address_zip='+localStorage.user_data_post_code;
-                        fakeUrl += '&address_country='+localStorage.user_data_country;
-                        fakeUrl += '&item_data='+data;
-                        fakeUrl += '&_form=ebay';
-
-                        jQuery.ajax(
-                        {
-                            dataType: "json",
-                            type: 'GET',
-                            async:true,
-                            url:fakeUrl,
-                            success:function(data)
-                            {
-                                payUrl(data,'ebay');
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                showError('Server error. Please, try again later');
-                            }
-                        }
-                        );
-
-                    }else{
-                        showError("Sorry, that item's not available");
-                    }
-
+                success:function(data) {
+                  payUrl(data,'ebay');
                 },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    showError('Server error. Please, try again later');
+                error: function (response, status, thrownError) {
+                  showError('Server error. Please, try again later');
+                  console.error(response, status. thrownError)
                 }
+              }
+                                 );
+
+            }else{
+              showError("Sorry, that item's not available");
             }
-        );
+
+          },
+          error: function (response, status, thrownError) {
+            showError('Server error. Please, try again later');
+            console.error(response, status. thrownError)
+          }
+        }
+                           );
 
     });
 
@@ -280,39 +265,43 @@ function InitAll4btc()
         var path = href.split( '/' );
 
         if(path[2]=='www.amazon.com' || path[2]=='www.amazon.co.uk' || path[2]=='www.amazon.de')
-        {
+          {
             var domain = path[2].split('.');
 
             var re = /\/([A-Z0-9]{10})(\/|\?|\b)/i
             var asin = re.exec(href);
             if (asin[1])
-            {
-                jQuery.ajax({dataType: "json",type: 'POST',async:true,
-                    url:'http://81.169.232.252:8080/api/1/buy_at_amazon',data:{
-                        name:localStorage.user_data_first_name+' '+localStorage.user_data_last_name,
-                        items:asin[1],
-                        company_name:localStorage.user_data_company_name,
-                        street_with_number:localStorage.user_data_street,
-                        city:localStorage.user_data_city,
-                        state:localStorage.user_data_state,
-                        zip:localStorage.user_data_post_code,
-                        email:localStorage.user_data_email,
-                        country_code:localStorage.user_data_country,
-                        amazon_domain:domain[2]+((domain[2]=='co')?'.uk':'')
-                    },success:function(data)
-                    {
-                        payUrl(data,'amazon');
-                    },error: function (xhr, ajaxOptions, thrownError) {
-                        showError('Server error. Please, try again later');
-                    }
+              {
+                bitcoin.makeRequest('http://81.169.232.252:8080/api/1/buy_at_amazon', {
+                  dataType: "json",
+                  type: 'POST',
+                  data:{
+                    name:localStorage.user_data_first_name+' '+localStorage.user_data_last_name,
+                    items:asin[1],
+                    company_name:localStorage.user_data_company_name,
+                    street_with_number:localStorage.user_data_street,
+                    city:localStorage.user_data_city,
+                    state:localStorage.user_data_state,
+                    zip:localStorage.user_data_post_code,
+                    email:localStorage.user_data_email,
+                    country_code:localStorage.user_data_country,
+                    amazon_domain:domain[2]+((domain[2]=='co')?'.uk':'')
+                  },
+                  success:function(data) {
+                    payUrl(data,'amazon');
+                  },
+                  error: function (response, status, thrownError) {
+                    showError('Server error. Please, try again later');
+                    console.error(response, status. thrownError)
+                  }
                 });
 
-            }else{
+              }else{
                 showError('no product could be found');
-            }
-        }else{
+              }
+          }else{
             showError('Incorrect link');
-        }
+          }
     });
 
 
@@ -435,4 +424,4 @@ function InitAll4btc()
             }
         });
 }
-     
+

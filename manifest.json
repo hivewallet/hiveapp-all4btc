@@ -4,5 +4,6 @@
   "version": "0.1",
   "author": "",
   "description": "Purchase all kinds of electronics with Bitcoin",
-  "icon": "icon.png"
+  "icon": "icon.png",
+  "accessedHosts": ["all4btc.com", "81.169.232.252"]
 }
