@@ -3,7 +3,7 @@
   "id": "all4btc",
   "version": "1.1.1",
   "author": "Hive",
-  "description": "Purchase all kinds of electronics with Bitcoin",
+  "description": "Buy anything with Bitcoin",
   "icon": "icon.png",
   "accessedHosts": ["all4btc.com", "81.169.232.252"]
 }
